@@ -24,5 +24,5 @@ use AYEmul<br>
 Also, It has PSG-SCC Register redirection feature...<br>
 set mode 1 will enable<br>
 <br>
-Problem: Timing is very inaccurate, PSGSCC has no noise, PSGSCC has freq limit(narrower than AY?)
+Problem: Timing is very inaccurate, PSGSCC has no noise, PSGSCC has freq limit(narrower than AY?)<br>
          Also SoundCortex doesn't support Envelope, so Lot of YM will sound quirk
