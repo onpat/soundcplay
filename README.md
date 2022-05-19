@@ -20,6 +20,9 @@ https://github.com/internalregister/AY-3-8910/blob/master/ymConverter.py<br>
 <br>
 How to Convert AY/PT3/Other format to YM?<br>
 use AYEmul<br>
-
+<br>
 Also, It has PSG-SCC Register redirection feature...<br>
 set mode 1 will enable<br>
+<br>
+Problem: Timing is very inaccurate, PSGSCC has no noise, PSGSCC has freq limit(narrower than AY?)
+         Also SoundCortex doesn't support Envelope, so Lot of YM will sound quirk
