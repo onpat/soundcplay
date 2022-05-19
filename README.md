@@ -2,11 +2,17 @@
 Play SNG(YM) file in Raspberry Pi using SoundCortex<br>
 <br>
 This program can play SNG(converted YM) file on SoundCortex using Raspberry Pi<br>
-compile with "gcc soundcplay.c"
+compile with "gcc soundcplay.c"<br>
 https://github.com/toyoshim/SoundCortex<br>
 Please connect with I2C<br>
 if you using LPC812, sometime SoundCortex will disappear in i2cdetect<br>
-if it happened, pull up Pin 4(SCK) while power on<br>
+if it happened, pull up Pin 04(SCK) while power on<br>
+<br>
+<br>
+Wiring in LPC812<br>
+RPi Pin01(3v3) 03(SDA) 05(SCL) 06(GND)<br>
+to<br>
+LPC Pin15(3v3) 19(SDA) 04(SCL) 16(GND) and 5(SoundOut, connect 3k3 and 10uf)<br>
 <br>
 How to generate SNG file from YM file?<br>
 use this ...<br>
