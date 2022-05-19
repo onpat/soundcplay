@@ -15,5 +15,5 @@ https://github.com/internalregister/AY-3-8910/blob/master/ymConverter.py<br>
 How to Convert AY/PT3/Other format to YM?<br>
 use AYEmul<br>
 
-Also, It has PSG-SCC Register redirection function...<br>
-set mode to 1 will enable<br>
+Also, It has PSG-SCC Register redirection feature...<br>
+set mode 1 will enable<br>
