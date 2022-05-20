@@ -25,5 +25,5 @@ Also, It has PSG-SCC Register redirection feature...<br>
 set mode 1 will enable<br>
 <a href="https://github.com/onpat/soundcplay/raw/main/lpc812.mp3">Playback example with PSGSCC</a>(Doorbellsplosion by Kulor)<br>
 <br>
-Problem: Timing is very inaccurate, PSGSCC has no noise, PSGSCC has freq limit(narrower than AY?)<br>
+Problem: Timing is inaccurate, PSGSCC has no noise, PSGSCC has freq limit(narrower than AY?)<br>
          Also SoundCortex doesn't support Envelope, so many YM files will sound quirk
