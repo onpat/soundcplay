@@ -54,7 +54,7 @@ void SoundCortexSCCWrite (unsigned char reg, unsigned char data) {
 
 void SoundCortexPSGSCC(unsigned char reg, unsigned char data) { //PSG in SCC Write
 unsigned char cmd[1] = {0xff};
-if (reg == 0x06) { //noise (dont work?)
+if (reg == 0x06) { //noise
  SoundCortexWrite(0x06, data);
  return;
 }
@@ -62,6 +62,11 @@ if (reg < 0x06) { //freq
  cmd[0] = reg + 0xa0;
 } else if (reg < 0x0b && reg > 0x07) { //vol
  cmd[0] = reg + 0xa2;
+} else if(reg == 0x07) {
+ cmd[0] = 0xaf;
+ data = data ^ 0x07;
+} else if(reg > 0x0a && reg < 0x0e) {//envelope(don't use)
+ return;
 }
 if (cmd[0] != 0xff) {
  SoundCortexSCCWrite(cmd[0], data);
@@ -71,10 +76,10 @@ if (cmd[0] != 0xff) {
 void InitSCC() { // SCC+ have 5 unique wavetable (SCC has 4)
  int i;
  int j;
- char wfa[32] = {127, 143, 159, 175, 191, 207, 223, 239, 255, 239, 223, 207, 191, 175, 159, 143, 127, 111, 95, 79, 63, 47, 31, 15, 0, 15, 31, 47, 63, 79, 95, 111}; //ch1 waveform, write first 8 of 32
- char wfb[32] = {127, 127, 127, 127, 0, 0, 0, 0, 127, 127, 127, 127, 127, 255, 255, 255, 255, 255, 255, 127, 127, 127, 127, 127, 0, 0, 0, 0, 127, 127, 127, 127};
+ char wfa[8] = {128, 0, 128, 255, 128, 0, 128, 255}; //ch1 waveform, write first 8 of 32
+ char wfb[8] = {127, 127, 127, 127, 0, 0, 0, 0};
  char wfc[32] = {128, 255, 128, 128, 16, 16, 16, 64, 128, 16, 16, 255, 240, 240, 192, 64, 16, 64, 64, 128, 192, 208, 224, 255, 255, 0, 128, 128, 64, 128, 192, 255};
- for (i = 0; i < 32; i++) { //waveform transfer
+ for (i = 0; i < 8; i++) { //waveform transfer
    SoundCortexSCCWrite(i, wfa[i]);
    SoundCortexSCCWrite(i+32, wfb[i]);
    SoundCortexSCCWrite(i+64, wfc[i]);
@@ -91,7 +96,7 @@ char cr[65535]; //register
 char ch[65535]; //value
 int i = 0; //song size
 int j = 0; //current position
-fp = fopen(filename, "rb"); //ymConverter.py SNG10 file converted from YM
+fp = fopen(filename, "rb");
 if (fp == NULL) {
  printf("file load failed\n");
  return;
@@ -108,14 +113,19 @@ while((ch[i] = fgetc(fp)) != EOF) { //load file to array
 }
 printf("size: %d\n", i);
 while(j < i) {
- if (cr[j] < 16) { //addr < 16 = write
+ if (cr[j] < 16) {
   if (mode == 0) {
-   SoundCortexWrite(cr[j], ch[j]);
+   if (cr[j] < 0x0b) {
+    SoundCortexWrite(cr[j], ch[j]);
+   }
   } else {
    SoundCortexPSGSCC(cr[j], ch[j]);
   }
- } else { //addr > 16 = wait
-  usleep(1000 * 20 * (ch[j] + 1));
+ //} else {
+ // usleep(1000 * 20);
+ //}
+ } else if (cr[j] == 16) {
+  usleep(1000 * 20);
  }
  j++;
 }
@@ -130,9 +140,14 @@ InitSCC();
   //SoundCortexWrite(0x01, 0x01);
   //SoundCortexWrite(0x07, 0xfe);
   //SoundCortexWrite(0x08, 0x0f);
+  //SoundCortexPSGSCC(0x00, 0xfd);
+  //SoundCortexPSGSCC(0x01, 0x01);
+  //SoundCortexPSGSCC(0x07, 0xfe);
+  //SoundCortexPSGSCC(0x08, 0x0f);
+  
   if (argc == 3) {
   PlaySNG(argv[1], strtol(argv[2], NULL, 0));
   } else {
-  printf("No file specified \r a.out filename(.sng) mode(0=normal, 1=PSGSCC)\n");
+  printf("No file specified - init olny \r scplay filename mode(0=normal, 1=PSGSCC)\n");
   } 
 }
